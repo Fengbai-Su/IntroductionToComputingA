@@ -1,0 +1,45 @@
+/*******
+描述
+编写程序，将大于整数m且紧靠m的k个素数输出（k小于10）。
+关于输入
+输入为一行，包括两个整数，第一个为整数m，第二个为个数k
+关于输出
+输出为一行，即满足条件的k个素数
+例子输入
+3 4
+例子输出
+5 7 11 13
+********/
+#include <iostream>
+#include <cstring>
+using namespace std;
+int isPrime(int N){//判断素数
+    if(N<2)return 0;
+    if(N==2)return 0;
+    if(N>2){
+        for(int i=2;i<=N/2+1;++i){
+            if(N%i==0)return 0;
+        }
+    }
+    return 1;
+}
+int main(int argc, const char * argv[]) {
+    int m=0,k=0;
+    cin>>m>>k;
+    int cnt=0;//记录素数个数
+    int i=m+1;
+    while(cnt!=k-1){
+        if(isPrime(i)==1){
+            cout<<i<<' ';
+            ++cnt;
+        }
+        ++i;
+    }
+    for(int j=i;;++j){
+        if(isPrime(j)==1){
+            cout<<j<<endl;
+            break;
+        }
+    }
+    return 0;
+}
