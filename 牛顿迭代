@@ -1,0 +1,62 @@
+/*******
+描述
+用牛顿迭代方法求一个数number的平方根，输出根以及迭代次数 
+注意: (迭代中止条件为 error<=1E-6 ) 
+初始x=1.0 
+
+输出格式如下： 
+#include 
+cout << i << ' ' 
+<< setprecision(2) 
+<< setiosflags(ios::fixed) 
+<< root << endl; 
+关于输入
+一个数字,double/int均可 
+关于输出
+输出两个数字: 迭代次数 和 根 
+
+迭代次数为一个整数 
+根为一个浮点数,保留小数点后两位
+例子输入
+12 
+
+25
+
+144
+
+例子输出
+6 3.46
+
+7 5.00
+
+8 12.00
+提示
+使用 while (cin >> number) 输入数据
+*******/
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+double Newton(double x,double N){//f(x)/f'(x)
+    double a=x*x-N;
+    double b=2*x;
+    return a/b;
+}
+int main(int argc, const char * argv[]) {
+    double number;
+    while(cin>>number){
+        double error=0;//误差
+        int cnt=1;//迭代次数
+        double x=1.0;
+        double std=sqrt(number);
+        error=abs(std-x);
+        while(error>1E-6){
+            x-=Newton(x,number);
+            error=abs(std-x);
+            cnt++;
+        }
+        cout<<cnt<<' '<<setprecision(2)<<setiosflags(ios::fixed)<<x<<endl;
+    }
+    return 0;
+}
