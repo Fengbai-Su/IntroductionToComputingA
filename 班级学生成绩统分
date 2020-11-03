@@ -1,0 +1,70 @@
+/************
+描述
+一个班有STUDENT_NUM名学生。请你使用“结构类型”编写一个 程序负责读取学生的ID号码和语文、数学成绩。然后计算每名同学 
+的总分。输出总分排在前三位的同学的学号和总分。
+关于输入
+第一个数字为学生总数n（n大于1，小于100000） 
+以后每3个数字代表一个学生的学号，语文成绩、数学成绩
+关于输出
+每行一个学生，分别是排名前三的学生的学号和总成绩，学号和总成绩之间以空格相间。
+例子输入
+10
+
+1 78 82
+
+2 78 92
+
+3 87 89
+
+4 84 86
+
+5 87 81
+
+6 92 89
+
+7 90 76
+
+8 94 81
+
+9 79 88
+
+10 86 88
+
+例子输出
+6 181
+
+3 176
+
+8 175
+***********/
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cstdio>
+#include <iomanip>
+#include <algorithm>
+#define MAX 2147483647
+using namespace std;
+struct stu{
+    int ID;
+    int Chinese;
+    int math;
+    int sum;
+};
+int cmp(const void *a,const void *b){
+    return (*(stu *)b).sum-(*(stu *)a).sum;
+}
+int main(){
+    int n;
+    cin>>n;
+    stu arr[100005];
+    for(int i=0;i<n;++i){
+        cin>>arr[i].ID>>arr[i].Chinese>>arr[i].math;
+        arr[i].sum=arr[i].Chinese+arr[i].math;
+    }
+    qsort(arr, n, sizeof(stu), cmp);
+    for(int i=0;i<3;++i){
+        cout<<arr[i].ID<<' '<<arr[i].sum<<endl;
+    }
+    return 0;
+}
