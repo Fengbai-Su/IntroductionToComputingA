@@ -1,0 +1,123 @@
+/*************
+描述
+计算机信息管理免不了要涉及到文本处理的问题，而在众多处理方式中对一句（段）话中单词数的统计是非常基本也是十分重要的一个环节。
+关于输入
+一句话，由英文字母，数字及常用标点符号组成。
+关于输出
+统计句子中各单词出现的次数，并按单词在句子中第一次出现的顺序输出。 
+输出包括若干行，每一行是一个单词，空格再跟着该单词在句子中出现的次数。
+例子输入
+A truly great book should be read in youth, again in maturity and once more in old age, as a fine building should be seen by morning light, at noon and by moonlight.
+例子输出
+A 1
+
+truly 1
+
+great 1
+
+book 1
+
+should 2
+
+be 2
+
+read 1
+
+in 3
+
+youth 1
+
+again 1
+
+maturity 1
+
+and 2
+
+once 1
+
+more 1
+
+old 1
+
+age 1
+
+as 1
+
+a 1
+
+fine 1
+
+building 1
+
+seen 1
+
+by 2
+
+morning 1
+
+light 1
+
+at 1
+
+noon 1
+
+moonlight 1
+提示
+注意一些细节比如单词之间不一定是用空格呀，用空格也不一定只有一个呀，还有整个句子前和最后的标点符号等，注意将这些_从一个整体考虑_，就可以编出比较完美的程序了。^_^ 
+
+大家加油！
+**************/
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cstdio>
+#include <iomanip>
+#include <algorithm>
+#define MAX 2147483647
+using namespace std;
+int main(){
+    char str[10000];
+    gets(str);
+    unsigned long len=strlen(str);
+    int cnt=0,cnt1=0,count=1;
+    int j=0,l=0;
+    char tmp1[10000]={0},tmp2[10000]={0};//存储单词
+    for(int i=0;i<len;++i){
+        if((str[i]>='a' && str[i]<='z') || (str[i]>='A' && str[i]<='Z') || str[i]=='\''){
+            cnt++;//记录输出单词长度
+            tmp1[j++]=str[i];//输出单词存入tmp1
+            cout<<str[i];
+        }else{
+            if(cnt==0)continue;//没读到字母
+            for(int k=i+1;k<len;++k){
+                if((str[k]>='a' && str[k]<='z') || (str[k]>='A' && str[k]<='Z') || str[k]=='\''){
+                    cnt1++;
+                    tmp2[l++]=str[k];//读入待比较单词
+                }else{
+                    cnt1=0;
+                    memset(tmp2,0,sizeof(tmp2));
+                    l=0;//初始化
+                }
+                if(cnt1==cnt && cnt1!=0){
+                    if(strcmp(tmp1,tmp2)==0 && !((str[k+1]>='a' && str[k+1]<='z') || (str[k+1]>='A' && str[k+1]<='Z'))){//判断单词是否相等
+                        count++;
+                        for(int m=k+1-cnt1;m<=k;++m){
+                            str[m]='#';//移除后面的重复单词
+                        }
+                    }else{
+                        cnt1=0;
+                        memset(tmp2,0,sizeof(tmp2));
+                        l=0;//初始化
+                        continue;
+                    }
+                }
+            }
+            cout<<' '<<count<<endl;
+            count=1;
+            cnt=0;
+            j=0;
+            memset(tmp1,0,sizeof(tmp1));
+        }
+    }
+    return 0;
+}
