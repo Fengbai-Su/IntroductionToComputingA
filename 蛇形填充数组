@@ -1,0 +1,92 @@
+/**************
+描述
+用数字1,2,3,4,... 蛇形填充规模为n*n的方阵,蛇形填充规则见示例数组 
+关于输入
+输入为一行，为一个整数n，表示输出方阵的行数(n <= 15)
+关于输出
+输出该方阵，相邻两个元素之间用空格间隔，每行最后一个元素后面没有空格
+例子输入
+4
+例子输出
+1 2 6 7
+
+3 5 8 13
+
+4 9 12 14
+
+10 11 15 16
+*************/
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cstdio>
+#include <iomanip>
+#define MAX 2147483647
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    int arr[20][20]={0};
+    int cnt=2;
+    if(n==0)return 0;
+    arr[0][0]=1;
+    int i=0,j=1;
+    int tmp=n*(n+1)/2;
+    while(cnt<=tmp){
+        while(j>=0){
+            arr[i++][j--]=cnt;
+            cnt++;
+        }
+        j=0;
+        if(cnt>tmp)break;
+        while(i>=0){
+            arr[i--][j++]=cnt;
+            cnt++;
+        }
+        i=0;
+    }
+    if(n%2==0){
+        i=n-1;
+        j=1;
+        while(cnt<=n*n){
+            while(j<=n-1){
+                arr[i--][j++]=cnt;
+                cnt++;
+            }
+            j=n-1;
+            i+=2;
+            if(cnt>n*n)break;
+            while(i<=n-1){
+                arr[i++][j--]=cnt;
+                cnt++;
+            }
+            i=n-1;
+            j+=2;
+        }
+    }else if(n%2!=0){
+        j=n-1;
+        i=1;
+        while(cnt<=n*n){
+            while(i<=n-1){
+                arr[i++][j--]=cnt;
+                cnt++;
+            }
+            i=n-1;
+            j+=2;
+            if(cnt>n*n)break;
+            while(j<=n-1){
+                arr[i--][j++]=cnt;
+                cnt++;
+            }
+            j=n-1;
+            i+=2;
+        }
+    }
+    for(i=0;i<n;++i){
+        for(j=0;j<n-1;++j){
+            cout<<arr[i][j]<<' ';
+        }
+        cout<<arr[i][n-1]<<endl;
+    }
+    return 0;
+}
