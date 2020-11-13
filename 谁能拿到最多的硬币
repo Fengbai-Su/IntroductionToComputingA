@@ -1,0 +1,49 @@
+/***********
+描述
+有n个硬币排成一排，每个硬币上用一个数字标识了它的价值。每次要你从最左边或者最右边拿出一个硬币。总共拿k次，写一个算法，使能拿到的硬币的价值和最大。
+关于输入
+输入包含两行，第一行为n， k； 
+第二行包含n个数字，表示n个硬币的价值。 
+
+1 <= k <= n <= 100000 
+单个硬币的价值大于0且不超过10000.
+关于输出
+输出可以拿到的k个硬币最大的价值和。
+例子输入
+6 3
+
+5 4 3 2 1 6
+
+例子输出
+15
+提示
+从左边开始连续取两个硬币，右边取一个硬币即可。
+**********/
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <iomanip>
+#define MAX 2147483647
+using namespace std;
+int main(){
+    int n,k;
+    cin>>n>>k;
+    int arr[100005];
+    for(int i=0;i<n;++i){
+        cin>>arr[i];
+    }
+    int sum=0;
+    int cost[100005];
+    cost[0]=arr[0];
+    for(int i=1;i<n;++i){
+        cost[i]=cost[i-1]+arr[i];
+    }
+    int max=cost[n-1]-cost[n-1-k];
+    for(int i=0;i<k;++i){
+        if(cost[i]+cost[n-1]-cost[n-k+i]>max)max=cost[i]+cost[n-1]-cost[n-k+i];
+    }
+    cout<<max;
+    return 0;
+}
