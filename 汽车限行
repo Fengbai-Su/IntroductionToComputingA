@@ -1,0 +1,115 @@
+/************
+描述
+为了缓解交通压力、减少空气污染，B市市政府决定在工作日（周一至周五）对机动车进行限行，每辆机动车每周将有一个工作日不能出行，但周末不限行。假设该政策从2000年1月1日起开始执行。限行安排为： 
+尾号为1和6：周一限行 
+尾号为2和7：周二限行 
+尾号为3和8：周三限行 
+尾号为4和9：周四限行 
+尾号为5、0和字母：周五限行 
+
+已知2000年1月1日为周六，现在给出一些日期和车牌号，求问该机动车在该天是否限行。
+关于输入
+输入第一行为一个整数n（1<=n<=100），表示测试的组数。 
+之后输入n行，每一行由一个日期和一个车牌号组成，用空格分隔。日期的格式为“YYYY-MM-DD"，例如“2000-01-23”，日期保证在2000年1月1日～9999年12月31日之间；车牌号的格式为6位字符串，由数字和大写字母组成，例如“A123Q6”。
+关于输出
+输出共n行，对于每一组测试输出一行。如果给出的车辆在给出日期限行，则输出“yes”，否则输出“no”。
+例子输入
+10
+
+2016-01-04 8WNVKN
+
+4592-11-05 JAR2RU
+
+2470-04-15 O54FSL
+
+7730-08-14 WDI3DO
+
+9895-01-09 1CQZ8N
+
+6293-10-20 V45WMK
+
+5304-10-11 RTDY7U
+
+9810-07-14 NAC5LS
+
+7268-11-07 PWQZ1M
+
+6140-09-20 HJR1QV
+例子输出
+no
+
+no
+
+no
+
+no
+
+no
+
+yes
+
+no
+
+no
+
+no
+
+no
+提示
+请考虑闰年。
+***********/
+include <iostream>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <iomanip>
+#define MAX 2147483647
+using namespace std;
+int leap(int year){
+    if((year%4==0 && year%100!=0) || year%400==0)return 1;
+    else return 0;
+}
+int day(int y,int m,int d){
+    int arr[13]={0,31,28,31,30,31,30,31,31,30,31,30,31};
+    int sum=0;
+    for(int i=1;i<m;++i){
+        if(leap(y)==1 && i==2)sum+=29;
+        else sum+=arr[i];
+    }
+    sum+=d;
+    if(y>2000){
+        for(int i=2000;i<y;++i){
+            if(leap(i)==0)sum+=365;
+            else sum+=366;
+        }
+    }
+    sum--;
+    if(sum%7)return sum%7-1;
+    else return sum%7+6;
+}
+int res(char a,int b){
+    if((a=='1' || a=='6') && b==1)return 1;
+    if((a=='2' || a=='7') && b==2)return 1;
+    if((a=='3' || a=='8') && b==3)return 1;
+    if((a=='4' || a=='9') && b==4)return 1;
+    if((a=='5' || a=='0' || (a>='A' && a<='Z') ) && b==5)return 1;
+    return 0;
+}
+int main(){
+    int n;
+    cin>>n;
+    for(int i=0;i<n;++i){
+        int y,m,d;
+        char c;
+        cin>>y>>c>>m>>c>>d;
+        char str[10];
+        cin>>str;
+        int a=day(y,m,d);
+        char b=str[5];
+        //cout<<a<<' '<<b<<endl;
+        if(res(b,a)==1)cout<<"yes"<<endl;
+        else cout<<"no"<<endl;
+    }
+    return 0;
+}
