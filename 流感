@@ -1,0 +1,119 @@
+/***********
+描述
+    学校里一共有n个学生。这n个学生里一共有m对朋友关系。 
+    在流感发作期，每个健康学生都要看望当天他生病的朋友（如果有的话），并在第二天被传染上疾病（除非他在免疫期内）； 
+    每个生病的学生在第二天都会痊愈，并在这一天具有免疫性。从第三天起，看望生病的朋友将再次使他染上流感。 
+    初始时（第一天），只有一个学生患有流感。试问多少天后流感会自动结束。 
+关于输入
+第一行输入两个正整数n和m。 
+接下来m行每行两个正整数x,y，表示编号为x的学生和编号为y的学生是一对朋友。输入数据保证每一对朋友关系只描述一次。 
+最后一行输入一个正整数，代表初始时患有流感的学生的编号。 
+
+n,m <= 100,000。 
+关于输出
+输出多少天后流感会结束。 
+
+如果天数超过2,000,000,000，则视为流感不会结束，输出-1。 
+例子输入
+4 4
+
+1 2
+
+2 3
+
+3 4
+
+2 4
+
+1
+例子输出
+3
+提示
+第一天1号学生生病，2号学生访问他； 
+第二天2号学生生病，其它三个学生访问他，由于1号处于免疫期，未患流感； 
+第三天3、4号学生生病，2号学生访问他们。 
+第四天3、4号学生痊愈，流感结束。
+**********/
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <iomanip>
+#define MAX 2147483647
+using namespace std;
+struct stu{
+    int *fri;
+    int p;
+};
+int main(){
+    int n,m;
+    cin>>n>>m;
+    stu arr[100005];
+    for(int i=0;i<100005;++i){
+        arr[i].fri=(int *)malloc(sizeof(int)*5000);
+    }
+    for(int i=0;i<100005;++i){
+        arr[i].p=1;
+    }
+    int x,y;
+    for(int i=0;i<m;++i){
+        cin>>x>>y;
+        arr[x].fri[arr[x].p]=y;
+        arr[x].fri[0]=arr[x].p;
+        arr[x].p++;
+        arr[y].fri[arr[y].p]=x;
+        arr[y].fri[0]=arr[y].p;
+        arr[y].p++;
+    }
+    bool flag[100005]={0};
+    bool immune[100005]={0};
+    bool watch[100005]={0};
+    int f;
+    cin>>f;
+    flag[f]=true;
+    for(int i=1;i<=n;++i){
+        for(int j=1;j<=arr[i].fri[0];++j){
+            if(arr[i].fri[j]==f){
+                watch[i]=true;
+            }
+        }
+    }
+    int day=0;
+    while(true){
+        day++;
+        if(day>2000000000){
+            cout<<-1;
+            break;
+        }
+        for(int i=1;i<=n;++i){
+            if(flag[i]==true){
+                flag[i]=false;
+                immune[i]=true;
+                watch[i]=false;
+            }
+            if(watch[i]==true && immune[i]==false){
+                flag[i]=true;
+                watch[i]=false;
+            }
+        }
+        for(int i=1;i<=n;++i){
+            if(flag[i]==true){
+                for(int j=1;j<=arr[i].fri[0];++j){
+                    if(flag[arr[i].fri[j]]==false && immune[arr[i].fri[j]]==false){
+                        watch[arr[i].fri[j]]=true;
+                    }
+                }
+            }
+        }
+        int k=0;
+        for(k=1;k<=n;++k){
+            if(flag[k]==true ||watch[k]==true)break;
+        }
+        if(k>n){
+            break;
+        }
+    }
+    cout<<day;
+    return 0;
+}
