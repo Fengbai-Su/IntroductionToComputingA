@@ -1,0 +1,53 @@
+/***********
+描述
+最近北京大学药学院的小晨在计概课上学习到二进制之后对其产生了浓厚的兴趣,在每次操作仅能移动相邻的0和1的前提下，她想知道把一个二进制数转换成另一个二进制数的最小操作数，
+关于输入
+输入共三行 
+第一行为一个整数n (0 < n <= 200)，代表二进制数的位数 
+第二行为第一个二进制数的每一位 
+第三行为第二个二进制数的每一位
+关于输出
+输出将第一个二进制数转换为第二个二进制数的最少操作数，如果答案不存在，则输出-1
+例子输入
+7
+
+1 1 0 1 0 0 1
+
+0 1 1 0 0 1 1
+例子输出
+4
+**********/
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <iomanip>
+#define MAX 2147483647
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    int arr1[205],arr2[205];
+    for(int i=0;i<n;++i){
+        cin>>arr1[i];
+    }
+    for(int i=0;i<n;++i){
+        cin>>arr2[i];
+    }
+    int tmp1[205]={0},tmp2[205]={0};
+    int j=0,k=0;
+    for(int i=0;i<n;++i){
+        if(arr1[i]==0)tmp1[j++]=i;
+        if(arr2[i]==0)tmp2[k++]=i;
+    }
+    int sum=0;
+    if(j!=k)cout<<-1;
+    else{
+        for(int i=0;i<j;++i){
+            sum+=abs(tmp1[i]-tmp2[i]);
+        }
+        cout<<sum;
+    }
+    return 0;
+}
