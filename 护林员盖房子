@@ -1,0 +1,92 @@
+/**************
+描述
+在一片保护林中，护林员想要盖一座房子来居住，但他不能砍伐任何树木。 
+现在请你帮他计算：保护林中所能用来盖房子的矩形空地的最大面积。
+关于输入
+输入： 
+保护林用一个二维矩阵来表示，长宽都不超过20（即<=20）。 
+第一行是两个正整数m,n，表示矩阵有m行n列。 
+然后是m行，每行n个整数，用1代表树木，用0表示空地。
+关于输出
+输出： 
+一个正整数，表示保护林中能用来盖房子的最大矩形空地面积。
+例子输入
+4 5
+
+0 1 0 1 1
+
+0 1 0 0 1
+
+0 0 0 0 0
+
+0 1 1 0 1
+例子输出
+5
+提示
+子矩阵边长可以为1，也就是说： 
+0 0 0 0 0 
+依然是一个可以盖房子的子矩阵。
+**********/
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <iomanip>
+#define MAX 2147483647
+using namespace std;
+int main(){
+    int m,n;
+    cin>>m>>n;
+    int arr[25][25];
+    for(int i=0;i<m;++i){
+        for(int j=0;j<n;++j){
+            cin>>arr[i][j];
+        }
+    }
+    int cnt=0;
+    int square=1;
+    int k=0;
+    for(int i=0;i<m;++i){
+        for(int j=0;j<n;++j){
+            int tmp=1;
+            int tmp1=1;
+            if(arr[i][j]==0){
+                for(k=j+1;k<n;++k){//横向
+                    if(arr[i][k]==0)tmp++;
+                    else break;
+                }
+                for(int l=i+1;l<m;++l){
+                    if(arr[l][j]!=0)break;
+                    for(int p=j;p<k;++p){
+                        if(arr[l][p]==0)tmp++;
+                        else{
+                            tmp-=(l-i)*(k-p);
+                            k=p;
+                            break;
+                        }
+                    }
+                }
+                for(k=i+1;k<m;++k){
+                    if(arr[k][j]==0)tmp1++;
+                    else break;
+                }
+                for(int l=j+1;l<n;++l){
+                    if(arr[i][l]!=0)break;
+                    for(int p=i;p<k;++p){
+                        if(arr[p][l]==0)tmp1++;
+                        else{
+                            tmp1-=(l-j)*(k-p);
+                            k=p;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(tmp1>tmp)tmp=tmp1;
+            if(tmp>square)square=tmp;
+        }
+    }
+    cout<<square;
+    return 0;
+}
