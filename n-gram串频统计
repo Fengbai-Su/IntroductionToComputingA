@@ -1,0 +1,79 @@
+/***********
+描述
+在文本分析中常用到n-gram串频统计方法，即，统计相邻的n 个单元（如单词、汉字、或者字符）在整个文本中出现的频率。假设有一个字符串，请以字符为单位按n-gram 统计长度为 n 的子串出现的频度，并输出最高频度以及频度最高的子串。设定所给的字符串不多于500个字符，且 1 < n <5。 如果有多个子串频度最高，则根据其在序列中第一次出现的次序输出多个，每行输出一个，如果最高频度不大于1，则输出 NO 
+
+例如，n=3，所给的串是：abcdefabcd， 
+则，所有的 3-gram是：abc,bcd,cde,def,efa,fab,abc,bcd。最后面的cd不足以形成3-gram，则不考虑。这样，abc 和 bcd 都出现了2次，其余的只出现了1次，于是，输出结果应该是： 
+2 
+abc 
+bcd 
+关于输入
+第一行为n 
+第二行为字符串 
+关于输出
+输出最高频度以及频度最高的所有子串。
+例子输入
+3
+
+abcdefabcd
+
+例子输出
+2
+
+abc
+
+bcd
+**********/
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <iomanip>
+#define MAX 2147483647
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    char str[505];
+    cin>>str;
+    int len=strlen(str);
+    char arc[505][10]={0};
+    for(int i=0;i<len-n+1;++i){
+        for(int j=0;j<n;++j){
+            arc[i][j]=str[i+j];
+        }
+    }
+    int cnt[505]={0};
+    bool flag[505]={0};
+    for(int i=0;i<len-n+1;++i){
+        if(flag[i]==true)continue;
+        cnt[i]++;
+        for(int j=i+1;j<len-n+1;++j){
+            if(strcmp(arc[i],arc[j])==0 && flag[j]==false){
+                cnt[i]++;
+                flag[j]=true;
+            }
+        }
+        flag[i]=true;
+    }
+    int max=0;
+    for(int i=0;i<len;++i){
+        if(cnt[i]>max)max=cnt[i];
+    }
+    if(max<=1){
+        cout<<"NO";
+        return 0;
+    }else{
+        cout<<max<<endl;
+        for(int i=0;i<len;++i){
+            if(cnt[i]==max){
+                for(int j=0;j<n-1;++j){
+                    cout<<arc[i][j];
+                }
+                cout<<arc[i][n-1]<<endl;
+            }
+        }
+    }
+    return 0;
+}
