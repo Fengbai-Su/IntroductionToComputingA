@@ -1,0 +1,32 @@
+/***********
+描述
+给定一个正整数（不超过9位），判断其是否为回文数。所谓回文数是指正向看与逆向看相等的数。如，123454321，12344321。若是，输出yes,若不是，输出no
+关于输入
+一个正整数
+关于输出
+若是，输出yes 
+若不是，输出no
+例子输入
+135797531
+例子输出
+yes
+********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int main(){
+    char str[15];
+    cin>>str;
+    int len=strlen(str);
+    for(int i=0;i<len/2;++i){
+        if(str[i]!=str[len-1-i]){
+            cout<<"no";
+            return 0;
+        }
+    }
+    cout<<"yes";
+    return 0;
+}
