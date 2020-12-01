@@ -1,0 +1,60 @@
+/***********
+描述
+给定整数集合S和一个目标数T，判断是否可以从S中挑选一个非空子集，子集中的数相乘的乘积为T。
+关于输入
+输入为两行。 
+第一行为目标数T和S中的元素个数N，以空格隔开。 
+第二行为S中的N个元素，以空格隔开。 
+其中 N <= 16。
+关于输出
+如果可以，则输出YES，否则输出NO。
+例子输入
+Sample Input 1:
+
+12 5
+
+1 2 3 4 5
+
+
+
+Sample Input 2:
+
+33 5
+
+4 2 8 7 5
+
+例子输出
+Sample Output 1:
+
+YES
+
+
+
+Sample Output 2:
+
+NO
+**********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int main(){
+    int T,S;
+    cin>>T>>S;
+    int arr[20];
+    for(int i=0;i<S;++i){
+        cin>>arr[i];
+    }
+    for(int i=0;i<S;++i){
+        for(int j=i+1;j<S;++j){
+            if(arr[i]*arr[j]==T){
+                cout<<"YES"<<endl;
+                return 0;
+            }
+        }
+    }
+    cout<<"NO"<<endl;
+    return 0;
+}
