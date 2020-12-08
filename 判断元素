@@ -1,0 +1,49 @@
+/***********
+来源	元培-From Whf
+描述
+有一个集合M是这样生成的： 
+(1) 已知 k 是集合 M 的元素； 
+(2) 如果 y 是 M 的元素，那么， 2y+1 和 3y+1 都是 M 的元素； 
+(3) 除了上述二种情况外，没有别的数能够成为 M 的一个元素。 
+
+问题：任意给定 k 和 x，请判断 x 是否是 M 的元素。这里的 k是无符号整数，x 不大于 100000， 
+如果是，则输出YES，否则，输出 NO 
+
+
+关于输入
+输入整数 k 和 x, 逗号间隔。
+关于输出
+如果是，则输出 YES，否则，输出NO 
+例子输入
+0,22
+例子输出
+YES
+**********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int cnt=0;
+int dfs(unsigned int k,int n){
+    if(n<k)return 0;
+    if(n==k){
+        cnt++;
+        return 1;
+    }
+    if(n>k){
+        if(!cnt)dfs(2*k+1,n);
+        if(!cnt)dfs(3*k+1,n);
+    }
+    if(cnt>0)return 1;
+    else return 0;
+}
+int main(){
+    unsigned int k,x;
+    char c;
+    cin>>k>>c>>x;
+    if(dfs(k,x)==1)cout<<"YES";
+    else cout<<"NO";
+    return 0;
+}
