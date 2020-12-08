@@ -1,0 +1,66 @@
+/***********
+来源	chg
+描述
+一个国家有 n 个城市，每两个城市之间都开设有航班，从城市 i 到城市 j 的航班价格为 cost[i, j] ，而且往、返航班的价格相同。 
+
+售货商要从一个城市出发，途径每个城市 1 次（且每个城市只能经过 1 次），最终返回出发地，而且他的交通工具只有航班，请求出他旅行的最小开销。
+关于输入
+输入的第 1 行是一个正整数 n （3 <= n <= 15） 
+然后有 n 行，每行有 n 个正整数，构成一个 n * n 的矩阵，矩阵的第 i 行第 j 列为城市 i 到城市 j 的航班价格。
+关于输出
+输出数据为一个正整数 m，表示旅行售货商的最小开销
+例子输入
+4
+
+0 4 1 3
+
+4 0 2 1
+
+1 2 0 5
+
+3 1 5 0
+例子输出
+7
+**********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int n;
+int cost[15][15]={0};
+int position[1<<15][15]={0};
+bool flag[15]={0};
+void dfs(int pos,int cos,int status,int visit){
+    if(visit>=n){
+        cos+=cost[pos][0];
+        if(position[(1<<n)-1][0]>cos || position[(1<<n)-1][0]<0){
+            position[(1<<n)-1][0]=cos;
+        }
+        return;
+    }
+    if(position[status][pos]>0 && position[status][pos]<cos){
+        return;
+    }else{
+        position[status][pos]=cos;
+    }
+    for(int i=0;i<n;++i){
+        if(flag[i]==true)continue;
+        flag[i]=true;
+        dfs(i,cos+cost[pos][i],status|(1<<i),visit+1);
+        flag[i]=false;
+    }
+}
+int main(){
+    cin>>n;
+    for(int i=0;i<n;++i){
+        for(int j=0;j<n;++j){
+            cin>>cost[i][j];
+        }
+    }
+    memset(position,-1,sizeof(position));
+    dfs(0,0,0,0);
+    cout<<position[(1<<n)-1][0];
+    return 0;
+}
