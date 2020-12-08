@@ -1,0 +1,58 @@
+/************
+描述
+程序中保存了七种水果的名字，要求用户输入一个与水果有关的句子。程序在已存储的水果名字中搜索，以判断句子中是否包含七种水果的名称。如果包含，则用词组"Brussels sprouts"替换句子中出现的水果单词，并输出替换后的句子。如果句子中没有出现这些水果的名字，则输出"You must not enjoy fruit.".假设七种水果的名字为：apples, bananas, peaches, cherries, pears, oranges, strawberries.
+关于输入
+输入有多行，每行是一个字符串。每一行输入中只会有一个水果名称，不会存在一行输入包括多种水果名称或重复水果名称的情况。
+关于输出
+如果包含水果单词，则用词组"Brussels sprouts"替换句子中出现的水果单词，并输出替换后的句子。如果句子中没有出现这些水果的名字，则输出"You must not enjoy fruit.".
+例子输入
+I really love peaches on my cereal.
+
+I’d rather have a candy bar
+
+apples are wonderful with lunch
+
+例子输出
+I really love Brussels sprouts on my cereal.
+
+You must not enjoy fruit.
+
+Brussels sprouts are wonderful with lunch
+************/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int main(){
+    char fruit[15][15]={"apples", "bananas", "peaches", "cherries", "pears", "oranges", "strawberries"};
+    char tar[25]={"Brussels sprouts"};
+    char str[1000];
+    while(cin.getline(str, 1000)){
+        int len=strlen(str);
+        char *p=NULL;
+        int i=0,tmp=0;
+        for(i=0;i<7;++i){
+            p=strstr(str,fruit[i]);
+            if(p!=NULL){
+                tmp=i;
+                break;
+            }
+        }
+        if(i==7){
+            cout<<"You must not enjoy fruit."<<endl;
+            continue;
+        }
+        for(char *q=str;q<p;++q){
+            cout<<*q;
+        }
+        cout<<tar;
+        int len2=strlen(fruit[tmp]);
+        for(char *q=p+len2;q<str+len;++q){
+            cout<<*q;
+        }
+        cout<<endl;
+    }
+    return 0;
+}
