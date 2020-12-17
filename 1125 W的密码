@@ -1,0 +1,90 @@
+/*********
+来源	1107
+描述
+加密一条信息需要三个整数码, k1, k2 和 k3。字符[a-i] 组成一组, [j-r] 是第二组, 其它所有字符 ([s-z] 和下划线)组成第三组。 在信息中属于每组的字符将被循环地向左移动ki个位置。 每组中的字符只在自己组中的字符构成的串中移动。解密的过程就是每组中的字符在自己所在的组中循环地向右移动ki个位置。 
+例如对于信息 the_quick_brown_fox 以ki 分别为 2, 3 和 1蔼进行加密。加密后变成 _icuo_bfnwhoq_kxert。下图显示了右旋解密的过程。 
+ 
+观察在组[a-i]中的字符，我们发现{i,c,b,f,h,e}出现在信息中的位置为{2,3,7,8,11,17}。当k1=2右旋一次后, 上述位置中的字符变成{h,e,i,c,b,f}。下表显示了经过所有第一组字符旋转得到的中间字符串，然后是所有第二组，第三组旋转的中间字符串。在一组中变换字符将不影响其它组中字符的位置。
+关于输入
+输入包括一到多组数据。每个组前面一行包括三个整数 k1, k2 和 k3，后面是一行加密信息。输入的最后一行是由三个0组成的。
+关于输出
+对于每组加密数据，输出它加密前的字符串。
+例子输入
+2 3 1
+
+_icuo_bfnwhoq_kxert
+
+1 1 1
+
+bcalmkyzx
+
+3 7 4
+
+wcb_mxfep_dorul_eov_qtkrhe_ozany_dgtoh_u_eji
+
+2 4 3
+
+cjvdksaltbmu
+
+0 0 0
+例子输出
+the_quick_brown_fox
+
+abcklmxyz
+
+the_quick_brown_fox_jumped_over_the_lazy_dog
+
+ajsbktcludmv
+****************/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int judge(char c){
+    if(c>='a' && c<='i')return 1;
+    if(c>='j' && c<='r')return 2;
+    if((c>='s' && c<='z') || c=='_')return 3;
+    return 0;
+}
+int main(){
+    int k1,k2,k3;
+    char str[1000];
+    while(cin>>k1>>k2>>k3){
+        if(k1==0 && k2==0 && k3==0)break;
+        cin>>str;
+        char rec[1000]={'\0'};
+        int cnt1=0,cnt2=0,cnt3=0;
+        int pos1[1000]={0},pos2[1000]={0},pos3[1000]={0};
+        int len=strlen(str);
+        for(int i=0;i<len;++i){
+            if(judge(str[i])==1)pos1[cnt1++]=i;
+            if(judge(str[i])==2)pos2[cnt2++]=i;
+            if(judge(str[i])==3)pos3[cnt3++]=i;
+        }
+        for(int i=0;i<cnt1;++i){
+            if(i+k1<cnt1){
+                rec[pos1[i+k1]]=str[pos1[i]];
+            }else{
+                rec[pos1[i+k1-(i+k1)/cnt1*cnt1]]=str[pos1[i]];
+            }
+        }
+        for(int i=0;i<cnt2;++i){
+            if(i+k2<cnt2){
+                rec[pos2[i+k2]]=str[pos2[i]];
+            }else{
+                rec[pos2[i+k2-(i+k2)/cnt2*cnt2]]=str[pos2[i]];
+            }
+        }
+        for(int i=0;i<cnt3;++i){
+            if(i+k3<cnt3){
+                rec[pos3[i+k3]]=str[pos3[i]];
+            }else{
+                rec[pos3[i+k3-(i+k3)/cnt3*cnt3]]=str[pos3[i]];
+            }
+        }
+        cout<<rec<<endl;
+    }
+    return 0;
+}
