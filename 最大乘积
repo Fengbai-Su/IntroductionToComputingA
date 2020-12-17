@@ -1,0 +1,44 @@
+/*********
+描述
+给出一个数S，请你把它分解为若干个不同的正整数{a1,a2,...,an}之和，即a1+a2+...+an=S，并且使得a1*a2*...*an最大。
+关于输入
+一个正整数S(5<=S<=1000)
+关于输出
+输出分解后的结果，按从小到大的顺序输出。
+例子输入
+7
+例子输出
+3 4
+*********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int main(){
+    int S;
+    cin>>S;
+    int arr[1000];
+    int l=0;
+    for(int i=2;;i++){
+        if(S==0)break;
+        if(S>=i){
+            arr[l++]=i;
+            S-=i;
+        }else{
+            break;
+        }
+    }
+    if(S>0){
+        for(int i=0;i<S;++i){
+            if(l-1-i>=0)arr[l-1-i]++;
+            else arr[l-1-i+S-1]++;
+        }
+    }
+    for(int i=0;i<l-1;++i){
+        cout<<arr[i]<<' ';
+    }
+    cout<<arr[l-1];
+    return 0;
+}
