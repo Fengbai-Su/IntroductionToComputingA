@@ -1,0 +1,94 @@
+/**********
+来源	元培-From Whf
+描述
+一个等差数列是指以增序排列后，相邻的两个数后一个与前一个数之差值恒定。规定一个等差数列中的数不应少于3个。任给 n ( 2 < n < 5000)个正整数，请判断可否从中选择子集构成等差数列。若能，则选出满足条件的最大子集合（即，元素个数最多），并按从小到大输出子集中的元素，逗号间隔。若有多个子集同时满足最大，则取差值最大的子集；若同时有多个子集满足集合大小最大，且差值也相等，则取起始元素最大的子集。如果没有满足条件的子集合，则输出 NO. 
+
+例如，有10个元素：20,14,6,15,22,7,23,8,18,25 
+
+从6开始的最长等差数列是：6,7,8 和 6,14,22 
+从7开始的最长等差数列是：7,15,23 
+从8开始的最长等差数列是：8,14,20 和 8,15,22 
+从14开始的最长等差数列是：14,18,22 
+从15开始的最长等差数列是：15,20,25 
+从18开始的最长等差数列是：18,20,22 
+
+上述7个最长序列中，长度都为3。按差值看，6,14,22 和 7,15,23 同时最大，但 7 > 6，因此，结果应该选 7,15,23
+关于输入
+2行： 
+第1行，n，表示整数个数； 
+第2行，n 个正整数，空格间隔； 
+关于输出
+按增序输出最长等差数列子集，逗号间隔。
+例子输入
+10
+
+20 14 6 15 22 7 23 8 18 25
+
+例子输出
+7,15,23
+**********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int dp[5005][5005]={0};
+int main(){
+    int n;
+    cin>>n;
+    int arr[5005];
+    for(int i=0;i<n;++i){
+        cin>>arr[i];
+    }
+    sort(arr,arr+n);
+    int MAX=0;
+    int tmp1=0,tmp2=0;
+    for(int i=1;i<n;++i){
+        int k=0;
+        for(int j=0;j<i;++j){
+            dp[j][i]=2;
+            while(k<j && arr[k]+arr[i]<2*arr[j])k++;
+            if(arr[k]+arr[i]==2*arr[j] && k<j){
+                dp[j][i]=dp[k][j]+1;
+            }
+            if(dp[j][i]>MAX || (dp[j][i]==MAX && arr[i]-arr[j]>=arr[tmp1]-arr[tmp2])){
+                MAX=dp[j][i];
+                tmp1=i;
+                tmp2=j;
+            }
+        }
+    }
+    int cnt=1;
+    for(int i=0;i<n;++i){
+        int j=0;
+        for(j=i+1;j<n;++j){
+            if(arr[i]==arr[j]){
+                cnt++;
+                if(cnt>MAX){
+                    MAX=cnt;
+                    tmp1=j;
+                    tmp2=i;
+                }
+            }else{
+                i=j-1;
+                cnt=1;
+                break;
+            }
+        }
+        if(j==n){
+            break;
+        }
+    }
+    //cout<<MAX<<endl;
+    if(MAX<3){
+        cout<<"NO"<<endl;
+        return 0;
+    }
+    int diff=arr[tmp1]-arr[tmp2];
+    cout<<arr[tmp1]-(MAX-1)*diff;
+    for(int i=0;i<MAX-1;++i){
+        cout<<','<<arr[tmp1]-diff*(MAX-2-i);
+    }
+    return 0;
+}
