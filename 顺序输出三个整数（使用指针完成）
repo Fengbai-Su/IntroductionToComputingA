@@ -1,0 +1,33 @@
+/***********
+描述
+输入三个数（包括整数与浮点数），按由小到大的顺序输出。若输入为整数，则按整数输出；若输出为浮点数，则输出为浮点数，且保留小数点后2位。（请使用参数为指针的函数来完成！！！）
+关于输入
+输入为三个数，逗号隔开。
+关于输出
+输出为按由小到大顺序排列的数，用逗号隔开。
+例子输入
+25，48，37
+例子输出
+25，37，48
+提示
+无。
+************/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int main(){
+    double *arr=(double *)malloc(sizeof(double)*3);
+    char c;
+    cin>>*arr>>c>>*(arr+1)>>c>>*(arr+2);
+    sort(arr,arr+3);
+    for(int i=0;i<2;++i){
+        if(floor(*(arr+i))==*(arr+i))cout<<*(arr+i)<<',';
+        else cout<<setiosflags(ios::fixed)<<setprecision(2)<<*(arr+i)<<',';
+    }
+    if(floor(*(arr+2))==*(arr+2))cout<<*(arr+2);
+    else cout<<setiosflags(ios::fixed)<<setprecision(2)<<*(arr+2);
+    return 0;
+}
