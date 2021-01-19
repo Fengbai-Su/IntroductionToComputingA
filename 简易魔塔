@@ -1,0 +1,147 @@
+/*********
+来源	计算概论A2019 - 申峻旭
+描述
+一群怪物占据了一座塔，这座塔被称为“魔塔”，一位勇士奉命去剿灭盘踞其中的怪物。 
+一座塔内部可能有复杂的空间结构，但本题会对此做出简化，塔内部只有一条路可以走，没有支路，也就是说勇士与怪物相遇的顺序是唯一且在输入数据中给定的（所有的怪物都是单独行动，勇士不会同时遇到复数只怪物）。 
+当勇士与怪物相遇时，勇士就需要与这只怪物战斗来消灭怪物。勇士和怪物都有三项与战斗相关的能力值：生命、攻击、防御，且这三项能力值一定都是正整数。勇士的攻击与防御能力值以及怪物的所有能力值会在输入数据中给出。 
+当勇士和怪物中的一方对另一方进行一次攻击时，如果攻击方的攻击能力值大于被攻击方的防御能力值，会使被攻击方受到等于差值的伤害，被攻击方生命减少，减少量等于伤害的值；如果攻击方的攻击能力值小于等于被攻击方的防御能力值，那么攻击方无法对被攻击方造成伤害，这次攻击不会对被攻击方的生命造成任何影响。勇士与怪物的战斗为从勇士开始轮流对对方进行一次攻击直至一方的生命小于等于0，战斗结束时生命小于等于0的一方被击败。 
+战斗的示例：假设勇士的能力值为（生命：400 攻击：20 防御：10），怪物的能力值为（生命：35 攻击：18 防御：1），勇士与怪物发生战斗。首先由勇士对怪物进行攻击，勇士的攻击比怪物的防御高，差值为20-1=19，勇士对怪物造成19点伤害，怪物的生命下降19，变为16=35-19；随后由怪物向勇士进行攻击，怪物的攻击比勇士的防御高，差值为18-10=8，怪物对勇士造成8点伤害，勇士的生命下降8，变为392=400-8；最后由勇士对怪物进行攻击，勇士的攻击比怪物的防御高，差值为20-1=19，勇士对怪物造成19点伤害，怪物的生命下降19，变为-3=16-19，-3<=0，怪物被击败。 
+如果勇士被击败，勇士的任务失败；如果怪物被击败，勇士会从战斗中汲取经验，可以在攻击与防御两项能力中选择一项能力提升，提升的具体值会在输入数据中给出。 
+因为勇士的目标是剿灭所有的怪物，所以如果出现勇士和怪物互相无法对对方造成伤害的战斗，判定勇士的任务失败。 
+在勇士消灭最后一只怪物后，勇士成功通过魔塔。 
+现在需要你编写一个程序计算在勇士最终能够通过魔塔的前提下，进入魔塔时勇士的生命能力值的最小值。
+关于输入
+关于输入： 
+输入的第一行为两个正整数，分别表示勇士进入魔塔时攻击和防御能力值，用空格分隔，攻击在前，防御在后； 
+输入的第二行为两个正整数，分别表示勇士在每次战斗后可以选择提升的能力值的具体值，用空格分隔，攻击在前，防御在后； 
+输入的第三行为一个正整数，表示怪物的总数n（1<=n<=100）； 
+接下来n行（第4行到第(n+3)行）为三个正整数，分别表示怪物的三项能力值，以空格分隔，顺序为生命、攻击、防御；输入的先后顺序即为勇士相遇的先后顺序，输入的第4行为第一只与勇士相遇的怪物的能力值，第(n+3)行为最后一只与勇士相遇的怪物的能力值 
+输入保证计算过程中用到的量都在int型变量的表示范围内。
+关于输出
+输出只有一行，输出勇士在能通过魔塔的情况下，进入魔塔时生命能力值的最小值；如果勇士不可能通过魔塔，输出“impossible”。
+例子输入
+198 209
+
+2 4
+
+11
+
+24 1580 190
+
+24 1580 190
+
+24 1580 190
+
+24 1580 190
+
+24 1580 190
+
+24 1580 190
+
+24 1580 190
+
+24 1580 190
+
+24 1580 190
+
+24 1580 190
+
+142857 233 205
+例子输出
+16345
+*********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include<cstdio>
+#define MAX 0x7fffffff
+using namespace std;
+struct monster{
+    int hp;
+    int attack;
+    int defend;
+};
+int a,b;//勇士攻防
+int n;//怪物总数
+int opt1,opt2;
+int run(monster *arr,int i,int op1,int op2,int hp,int tmpa,int tmpb){
+    a+=op1;
+    b+=op2;
+    //cout<<a<<endl;
+    int tmpa1=a;
+    int tmpb1=b;
+    int tmphp=arr[i].hp;
+    if(tmpa+i*opt1<=arr[i].defend)return -1;
+    if(arr[i].defend>=a)return 0;
+    /*while(tmphp>0 && hp>0){
+        if(arr[i].defend>=a)return 0;
+        tmphp-=(a-arr[i].defend);
+        if(tmphp<=0)break;
+        else{
+            if(arr[i].attack>=b)
+                hp-=(arr[i].attack-b);
+            //cout<<hp<<endl;
+        }
+        //cout<<tmphp<<' '<<hp<<endl;
+    }*/
+    int q1=tmphp/(a-arr[i].defend);
+    if(arr[i].attack>b){
+        int q2=hp/(arr[i].attack-b);
+        if(q1<=q2){
+            tmphp-=q1*(a-arr[i].defend);
+            if(tmphp!=0)hp-=q1*(arr[i].attack-b);
+            else hp-=(q1-1)*(arr[i].attack-b);
+        }
+        if(q1>q2)return 0;
+    }
+    if(hp<=0)return 0;
+    else{
+        if(i<n-1){
+            int tmp=run(arr,i+1,opt1,0,hp,tmpa,tmpb);
+            //cout<<tmp<<endl;
+            if(tmp==-1)return -1;
+            if(tmp==1)return 1;
+            int tmp2=-2;
+            if(tmp==0){
+                a=tmpa1;
+                b=tmpb1;
+                tmp2=run(arr,i+1,0,opt2,hp,tmpa,tmpb);
+                if(tmp2==0)return 0;
+                //if(tmp2==-1)return -1;
+            }
+        }
+    }
+    return 1;
+}
+int main(int argc, const char * argv[]) {
+    cin>>a>>b;
+    cin>>opt1>>opt2;//勇士可提升能力
+    cin>>n;
+    int tmpa=a;
+    int tmpb=b;
+    monster arr[n];
+    for(int i=0;i<n;++i){
+        cin>>arr[i].hp>>arr[i].attack>>arr[i].defend;
+    }
+    for(int i=0;i<=MAX;++i){
+        int tmp=run(arr,0,0,0,i,tmpa,tmpb);
+        if(tmp==-1){
+            cout<<"impossible";
+            return 0;
+        }
+        if(tmp==1){
+            cout<<i;
+            return 0;
+        }
+        a=tmpa;
+        b=tmpb;
+    }
+    cout<<"impossible";
+    return 0;
+}
