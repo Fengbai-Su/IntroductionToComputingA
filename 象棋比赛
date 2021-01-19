@@ -1,0 +1,107 @@
+/**********
+描述
+你需要从你的棋牌协会中选出30人参加一场团队邀请赛,比赛共30场,15人先手持红,另15人后手持黑.每个人先手和后手的能力值有所不同,现在你需要从你的协会里选出这30人,使得其中15人持红的能力值与另外15人持黑的能力值的总和尽可能大.
+关于输入
+n行(30<=n<=1000),每行两个正整数,分别表示一个人执红和执黑的能力值.
+关于输出
+输出一个正整数,表示按最优方案选取时的能力值总和.
+例子输入
+87 84
+
+66 78
+
+86 94
+
+93 87
+
+72 100
+
+78 63
+
+60 91
+
+77 64
+
+77 91
+
+87 73
+
+69 62
+
+80 68
+
+81 83
+
+74 63
+
+86 68
+
+53 80
+
+59 73
+
+68 70
+
+57 94
+
+93 62
+
+74 80
+
+70 72
+
+88 85
+
+75 99
+
+71 66
+
+77 64
+
+81 92
+
+74 57
+
+71 63
+
+82 97
+
+76 56
+例子输出
+2506
+********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <ctime>
+#define MAX 0x7fffffff
+using namespace std;
+int arr[1005][2];
+int dp[1005][20][20]={0};
+int main(){
+    int cnt=1;
+    while(cin>>arr[cnt][0]>>arr[cnt][1])cnt++;
+    dp[1][1][0]=arr[1][0];
+    dp[1][0][1]=arr[1][1];
+    for(int i=2;i<=cnt-1;++i){
+        for(int j=0;j<=15 && j<=i;++j){
+            for(int k=0;k<=15 && k+j<=i;++k){
+                int tmp=dp[i-1][j][k];
+                if(j>0 && dp[i-1][j-1][k]+arr[i][0]>=tmp && dp[i-1][j-1][k]+arr[i][0]>=dp[i-1][j][k-1]+arr[i][1]){
+                    dp[i][j][k]=dp[i-1][j-1][k]+arr[i][0];
+                }else if(k>0 && dp[i-1][j][k-1]+arr[i][1]>=dp[i-1][j-1][k]+arr[i][0] && dp[i-1][j][k-1]+arr[i][1]>=tmp){
+                    dp[i][j][k]=dp[i-1][j][k-1]+arr[i][1];
+                }else{
+                    dp[i][j][k]=tmp;
+                }
+            }
+        }
+    }
+    cout<<dp[cnt-1][15][15];
+    return 0;
+}
