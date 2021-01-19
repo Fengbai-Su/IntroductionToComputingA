@@ -1,0 +1,50 @@
+/**********
+来源	chg
+描述
+给定 n 种物品和一背包。物品 i 的重量是 wi，其价值为 pi，背包的容量为 m。问应如何选择装入背包中的物品，使得装入背包中物品的总价值最大？
+关于输入
+输入数据共有 n 行， 
+第一行有一个整数 n 和一个实数 m，分别为物品数和背包容量。 
+接下来有 n 行，每行有两个实数，分别为背包 i 的重量和价值
+关于输出
+数出数据只有一个实数，它表示最大的总价值。要求精确到小数点后 5 位
+例子输入
+3 10
+
+8 10
+
+3 8
+
+3 8
+例子输出
+16.00000
+**********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <ctime>
+using namespace std;
+double w[1000]={0},v[1000]={0};
+int n;
+double maxx=0;
+double maxValue(int p, double m){
+    if(m==0)return 0;
+    if(p==0 && w[p]<=m)return v[0];
+    if(p==0 && w[p]>m)return 0;
+    if(w[p]>m && p>0)return maxValue(p-1,m);
+    return max(maxValue(p-1,m),maxValue(p-1,m-w[p])+v[p]);
+}
+int main(){
+    double m;
+    cin>>n>>m;
+    for(int i=0;i<n;++i){
+        cin>>w[i]>>v[i];
+    }
+    printf("%.5lf",maxValue(n-1, m));
+    return 0;
+}
