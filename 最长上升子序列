@@ -1,0 +1,57 @@
+/********
+描述
+给出长为n的正整数序列，请求出这个序列的最长上升子序列。
+关于输入
+输入包括两行。 
+第一行为一个正整数n(1<=n<=200000)。 
+第二行为n个正整数，表示整个序列。
+关于输出
+输出最长升序子列的长度。
+例子输入
+5
+
+2 3 1 4 5
+例子输出
+4
+提示
+普通的O(n^2)算法会超时。 
+请使用好的数据结构或方法（如平衡树、二分查找）使得算法的整体复杂度为O(nlogn)。
+********/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include<cstdio>
+#define MAX 0x7fffffff
+using namespace std;
+const int MAXN=200001;
+
+int a[MAXN];
+int d[MAXN];
+
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++)
+        scanf("%d",&a[i]);
+    d[1]=a[1];
+    int len=1;
+    for(int i=2;i<=n;i++)
+    {
+        if(a[i]>d[len])
+            d[++len]=a[i];
+        else
+        {
+            int j=std::lower_bound(d+1,d+len+1,a[i])-d;
+            d[j]=a[i];
+        }
+    }
+    printf("%d\n",len);
+    return 0;
+}
